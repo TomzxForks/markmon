@@ -24,8 +24,8 @@
             newDom.innerHTML = htmlStr;
             changeHighlighter.removeMarker();
             var newTree = new WrappedDomTree(newDom);
-            window.newTree = newTree;
             window.oldTree = tree;
+            window.newTree = newTree;
             console.time("diff");
             console.profile("pdiff");
             var r = tree.diffTo(newTree);
@@ -38,7 +38,21 @@
                 return r;
             }
             if(r.possibleReplace){
-                changeHighlighter.addMarkerTo(r.possibleReplace.cur, r.possibleReplace.prev);
+                var currentNode = r.possibleReplace.cur;
+                var parentNode = currentNode.parentNode;
+                console.log(r.possibleReplace.cur);
+
+                if (parentNode.classList.contains('math')) {
+                    var equation = currentNode.nodeValue;
+                    while (parentNode.firstChild) {
+                        parentNode.removeChild(parentNode.firstChild);
+                    }
+                    parentNode.appendChild(currentNode);
+                    MathJax.Hub.Typeset(parentNode);
+                    r = null;
+                } else {
+                    changeHighlighter.addMarkerTo(r.possibleReplace.cur, r.possibleReplace.prev);
+                }
             } else {
                 changeHighlighter.addMarkerTo(r.last);
             }
