@@ -6,9 +6,9 @@
 
     var socket = io.connect(location.origin);
     socket.on("content", function(data){
-        console.log("got data");
+        console.log('Got data', data);
         var r = contentDisplay.update(data.html);
-        console.log(r);
+        console.log('Content', r);
         if(!r) return;
         r.inserted = r.inserted.map(function(elm){
             while(elm && !elm.innerHTML) elm = elm.parentElement;
@@ -16,10 +16,11 @@
         }).filter(function(elm){
             return !!elm;
         });
+
         MathJax.Hub.Typeset(r.inserted, function(){
             setTimeout(function(){
                 changeHighlighter.syncHighlighter();
-                scroller.scorllTo(changeHighlighter.getMarkerY() - window.innerHeight / 2 | 0);
+                scroller.scrollTo(changeHighlighter.getMarkerY() - window.innerHeight / 2 | 0);
             }, 10);
         });
     });

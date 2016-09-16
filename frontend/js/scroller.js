@@ -2,7 +2,7 @@
     var scroller = markmon.scroller = {
         scrollTimer: 0,
         stepTime: 10,
-        scorllTo: function(y){
+        scrollTo: function(y){
             clearTimeout(this.scrollTimer);
             if(y === window.scrollY) return;
             this.time = 200;
